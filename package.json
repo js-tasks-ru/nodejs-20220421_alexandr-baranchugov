@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Node.JS Course Materials",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --no-warnings --ignore=node_modules/** **/*.test.js",
+    "test": "cross-env NODE_ENV=test mocha --ignore=node_modules/** **/*.test.js ",
     "lint": "eslint --ignore-pattern 'public' --ignore-pattern '*.test.js' --ignore-pattern 'client' ."
   },
   "keywords": [],
@@ -26,6 +26,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "cross-env": "^7.0.2",
+    "debug": "^4.3.4",
     "fs-extra": "^10.0.0",
     "juice": "^8.0.0",
     "koa": "^2.7.0",
@@ -36,6 +37,7 @@
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.11",
+    "logger.js": "0.0.1",
     "mongoose": "^6.0.12",
     "mongoose-beautiful-unique-validation": "github:tadjik1/mongoose-beautiful-unique-validation",
     "nodemailer": "^6.1.1",
