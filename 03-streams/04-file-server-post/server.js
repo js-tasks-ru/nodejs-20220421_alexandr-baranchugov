@@ -21,22 +21,18 @@ server.on('request', async (req, res) => {
         res.end('File already exist');
       } else {
         let isError = false;
-        const limitSizeStream = new LimitSizeStream({limit: Math.pow(2, 20)});
-        const writeFileStream = fs.createWriteStream(filepath);
+        const limitSizeStream = new LimitSizeStream({limit: 1e6});
+        const writeFileStream = fs.createWriteStream(filepath, {flags: 'wx'});
 
         req
           .pipe(limitSizeStream)
           .pipe(writeFileStream);
 
-        req.on('aborted', () => {
+        limitSizeStream.on('error', (error) => {
           isError = true;
 
           writeFileStream.end();
           removeFile();
-        });
-
-        limitSizeStream.on('error', (error) => {
-          isError = true;
 
           if (error.code === 'LIMIT_EXCEEDED') {
             res.statusCode = 413;
@@ -45,29 +41,33 @@ server.on('request', async (req, res) => {
             res.statusCode = 500;
             res.end('Internal server error');
           }
+        });
+
+        writeFileStream
+          .on('error', (error) => {
+            isError = true;
+
+            if (error.code === 'EEXIST') {
+              res.statusCode = 409;
+              res.end('File already exist');
+            } else {
+              res.statusCode = 500;
+              res.end('Internal server error');
+              removeFile();
+            }
+          })
+          .on('finish', () => {
+            if (!isError) {
+              res.statusCode = 201;
+              res.end('ok');
+            }
+          });
+
+        req.on('aborted', () => {
+          isError = true;
 
           writeFileStream.end();
           removeFile();
-        });
-
-        writeFileStream.on('error', (error) => {
-          isError = true;
-
-          if (error.code === 'EEXIST') {
-            res.statusCode = 409;
-            res.end('File already exist');
-          } else {
-            res.statusCode = 500;
-            res.end('Internal server error');
-            removeFile();
-          }
-        });
-
-        writeFileStream.on('finish', () => {
-          if (!isError) {
-            res.statusCode = 201;
-            res.end('ok');
-          }
         });
       }
       break;
@@ -78,10 +78,10 @@ server.on('request', async (req, res) => {
   }
 
   function removeFile() {
-    fs.unlink(filepath, () => {
-    });
+    if (fs.existsSync(filepath)) {
+      fs.rmSync(filepath, {force: true});
+    }
   }
 });
-
 
 module.exports = server;
