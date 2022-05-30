@@ -8,7 +8,6 @@ module.exports = class Validator {
 
     for (const field of Object.keys(this.rules)) {
       const rules = this.rules[field];
-
       const value = obj[field];
       const type = typeof value;
 
