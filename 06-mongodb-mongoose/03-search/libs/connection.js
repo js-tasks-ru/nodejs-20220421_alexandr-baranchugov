@@ -4,4 +4,4 @@ const config = require('../config');
 
 mongoose.plugin(beautifyUnique);
 
-module.exports = mongoose.createConnection(config.mongodb.uri).asPromise();
+module.exports = mongoose.createConnection(config.mongodb.uri);

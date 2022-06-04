@@ -11,15 +11,13 @@ module.exports.productsBySubcategory = async function productsBySubcategory(ctx,
   };
 };
 
-module.exports.productList = async function productList(ctx, next) {
-  console.log(await getProducts());
-
+module.exports.productList = async function productList(ctx) {
   ctx.body = {
     products: await getProducts(),
   };
 };
 
-module.exports.productById = async function productById(ctx, next) {
+module.exports.productById = async function productById(ctx) {
   const {id} = ctx.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
