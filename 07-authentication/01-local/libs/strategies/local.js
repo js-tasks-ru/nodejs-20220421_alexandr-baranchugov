@@ -12,7 +12,6 @@ module.exports = new LocalStrategy(
     }
 
     if (await user.checkPassword(password)) {
-      console.log('Valid password');
       done(null, user);
     } else {
       done(null, false, 'Неверный пароль');
