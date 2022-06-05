@@ -72,11 +72,10 @@ router.use(async (ctx, next) => {
     return;
   }
 
+  ctx.user = session.user;
   session.lastVisit = new Date();
 
   await session.save();
-
-  ctx.user = session.user;
 
   return next();
 });
