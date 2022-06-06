@@ -1,8 +1,10 @@
 const Category = require('./models/Category');
 const Product = require('./models/Product');
 
-async function fillDb() {
+async function db() {
   let category;
+
+  console.log('fill db')
 
   if (!(await Category.find()).length) {
     category = await Category.create({
@@ -34,21 +36,9 @@ async function fillDb() {
       images: ['image1'],
     });
 
-    Product.schema.index({
-      title: 'text',
-      description: 'text',
-    }, {
-      weights: {
-        title: 10,
-        description: 5,
-      },
-      name: 'TextSearchIndex',
-      default_language: 'russian',
-    });
-
     await Category.syncIndexes();
     await Product.syncIndexes();
   }
 }
 
-module.exports = fillDb();
+module.exports = db();
