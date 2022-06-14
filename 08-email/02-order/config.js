@@ -36,7 +36,7 @@ module.exports = {
     },
   },
   mailer: {
-    user: 'alexander.b0212',
-    password: 'nmnjosaozkodabxf',
+    user: '',
+    password: '',
   },
 };
