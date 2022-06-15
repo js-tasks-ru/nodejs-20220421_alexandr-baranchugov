@@ -39,11 +39,9 @@ module.exports.productById = async function productById(ctx) {
   }
 };
 
-async function getProducts(find) {
-  return (find
-      ? Product.find(find)
-      : Product.find()
-  )
+async function getProducts(filter = {}) {
+  return Product
+    .find(filter)
     .lean()
     .then(productsMap)
     .catch(() => []);
