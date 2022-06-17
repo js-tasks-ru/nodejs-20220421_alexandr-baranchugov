@@ -13,3 +13,5 @@ rules:
     - off
   linebreak-style:
     - off
+  prefer-const:
+    - off
